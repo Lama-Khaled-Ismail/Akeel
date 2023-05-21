@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 
 @Entity
@@ -13,13 +16,11 @@ public class Meal {
 	private int mealID;
 	private String name;
 	private float price;
-	
-	Meal(){}
-	Meal(int mealID,String name, float price){
-		this.mealID = mealID;
-		this.name = name;
-		this.price = price;
-	}
+	@ManyToOne
+	@JoinColumn(name="meals")
+	private Restaurant fk_restaurantId;
+
+
 	public float getPrice() {
 		return price;
 	}

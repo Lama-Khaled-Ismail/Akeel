@@ -18,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.example.Model.Restaurant;
 import com.example.Model.RestaurantOwner;
 
 
@@ -25,7 +26,7 @@ import com.example.Model.RestaurantOwner;
 @Stateless
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/")
+@Path("/Owner")
 public class AkeelService{
 	
 	
@@ -39,8 +40,38 @@ public class AkeelService{
 		return "Hello";
 	}
 
+	@GET
+	@Path("login")
+	public JsonObject login(RestaurantOwner owner){
+		int id =  owner.getUserID();
+		JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+
+		TypedQuery<RestaurantOwner> query=em.createQuery(
+			"SELECT r from RestaurantOwner r where r.userID >: ID",RestaurantOwner.class);
+		query.setParameter("ID", id);
+
+		if(	query.getSingleResult().getPassword().equals(owner.getPassword())){
+			return objectBuilder.add("WELCOME USER,", owner.getName()).build();
+		} 
+		return objectBuilder.add("LOGIN FAILED.TRY AGAIN",owner.getName()).build();
+	}
+
 	@POST
-	@Path("Owner")
+	@Path("addRest/{ownerid}")
+	public Restaurant addRestaurant(String id,Restaurant rest){
+		int ownerid = Integer.parseInt(id);
+		TypedQuery<RestaurantOwner> query=em.createQuery(
+			"SELECT r from RestaurantOwner r where r.userID >: ID",RestaurantOwner.class);
+		query.setParameter("ID", ownerid);
+
+		rest.setOwnerID(query.getSingleResult());
+		em.persist(rest);
+
+		return rest;
+	}
+
+	@POST
+	@Path("signup")
 	public JsonObject signUp(RestaurantOwner owner){
 		em.persist(owner);
 		// Create a JsonReader object to read the JSON input from the InputStream
@@ -55,9 +86,8 @@ public class AkeelService{
         // owner.setRest(rest);
  */
         JsonObjectBuilder objectBuilder = Json.createObjectBuilder()
-        		.add("USERNAME ", owner.getName())
+        		.add("SIGN UP SUCCESSFUL\nUSERNAME ", owner.getName())
         		.add("ID", owner.getUserID());
-        		
         // Create a JSON object with the builder
         JsonObject jsonOutput = objectBuilder.build();
 

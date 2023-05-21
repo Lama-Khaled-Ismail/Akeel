@@ -14,9 +14,9 @@ public class RestaurantOwner {
 	private int userID;
 	private String name;
 	private String password;
-      //@OneToOne
-	//@JoinColumn(name="restaurantID")
-	//private Restaurant rest;
+    @OneToOne
+	@JoinColumn(name="owner")
+	private Restaurant rest;
     //private Role role;
 	
     //public RestaurantOwner(){ role = Role.OWNER;}
@@ -45,11 +45,6 @@ public class RestaurantOwner {
 		this.name = name;
 	}
 
-/* 	public Role getRole() {
-		return role;
-	}
-
-    
 	public Restaurant getRest() {
 		return rest;
 	}
@@ -57,6 +52,12 @@ public class RestaurantOwner {
 	public void setRest(Restaurant rest) {
 		this.rest = rest;
 	}
+/* 	public Role getRole() {
+		return role;
+	}
+
+    
+	
 
 */
 	
