@@ -1,10 +1,14 @@
 package com.example.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -14,9 +18,9 @@ public class RestaurantOwner {
 	private int userID;
 	private String name;
 	private String password;
-    @OneToOne
-	@JoinColumn(name="owner")
-	private Restaurant rest;
+    
+	@OneToMany(mappedBy = "owner")
+	private List<Restaurant> rests = new ArrayList<Restaurant>();
     //private Role role;
 	
     //public RestaurantOwner(){ role = Role.OWNER;}
@@ -45,12 +49,13 @@ public class RestaurantOwner {
 		this.name = name;
 	}
 
-	public Restaurant getRest() {
-		return rest;
+	public List<Restaurant> getRests() {
+		return rests;
 	}
 
-	public void setRest(Restaurant rest) {
-		this.rest = rest;
+	
+	public void addRestaurant(Restaurant rest) {
+		rests.add(rest);
 	}
 /* 	public Role getRole() {
 		return role;

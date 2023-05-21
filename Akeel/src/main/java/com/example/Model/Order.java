@@ -17,13 +17,6 @@ import javax.persistence.OneToOne;
 
 import org.omg.PortableServer.IdAssignmentPolicyValue;
 
-enum orderStatus {
-
-    PREPARING,
-    DELIVERED,
-    CANCELED
-}
-
 @Entity
 public class Order {
     
