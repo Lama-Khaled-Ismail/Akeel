@@ -24,7 +24,7 @@ public class Restaurant {
     @JoinColumn(name ="rests")
 	private RestaurantOwner owner;
 	@OneToMany(mappedBy = "fk_restaurantId",fetch = FetchType.LAZY)
-	private List<Meal> meals;
+	private List<Meal> meals ;
 	
 	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
 	private Set<Order> orders;

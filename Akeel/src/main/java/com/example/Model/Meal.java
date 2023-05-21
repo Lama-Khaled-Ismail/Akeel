@@ -17,11 +17,19 @@ public class Meal {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int mealID;
-	private String name;
+	private String mealName;
 	private float price;
+	
 	@ManyToOne
 	@JoinColumn(name="meals")
 	private Restaurant fk_restaurantId;
+	
+	public Restaurant getFk_restaurantId() {
+		return fk_restaurantId;
+	}
+	public void setFk_restaurantId(Restaurant fk_restaurantId) {
+		this.fk_restaurantId = fk_restaurantId;
+	}
 	@ManyToMany(mappedBy = "items")
 	private Set<Order> ordersWithThisMeal;
 
@@ -33,10 +41,10 @@ public class Meal {
 		this.price = price;
 	}
 	public String getName() {
-		return name;
+		return mealName;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.mealName = name;
 	}
 }
    

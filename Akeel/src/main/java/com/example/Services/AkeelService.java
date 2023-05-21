@@ -49,7 +49,7 @@ public class AkeelService{
 
 	@GET
 	@Path("login")
-	public JsonObject login(RestaurantOwner owner){
+	public String login(RestaurantOwner owner){
 		int id =  owner.getUserID();
 		JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
 
@@ -58,48 +58,38 @@ public class AkeelService{
 		query.setParameter("ID", id);
 
 		if(	query.getSingleResult().getPassword().equals(owner.getPassword())){
-			return objectBuilder.add("WELCOME USER,", owner.getName()).build();
+			return "WELCOME USER, " +owner.getName();
 		} 
-		return objectBuilder.add("LOGIN FAILED.TRY AGAIN",owner.getName()).build();
+		return "LOGIN FAILED.TRY AGAIN"+owner.getName();
 	}
 
 	@POST
 	@Path("signup")
-	public JsonObject signUp(RestaurantOwner owner){
+	public String signUp(RestaurantOwner owner){
 		em.persist(owner);
-		// Create a JsonReader object to read the JSON input from the InputStream
-/*		JsonReader reader = Json.createReader(new InputStreamReader(input));
-		// Parse the JSON input to a JsonObject
-        JsonObject jsonInput = reader.readObject();
-        
-        owner.setName(jsonInput.R
-        // owner.setRest(rest);
- */
-        JsonObjectBuilder objectBuilder = Json.createObjectBuilder()
-        		.add("SIGN UP SUCCESSFUL\nUSERNAME ", owner.getName())
-        		.add("ID", owner.getUserID());
-        // Create a JSON object with the builder
-        JsonObject jsonOutput = objectBuilder.build();
-
-        return jsonOutput;
+       
+        return "SIGN UP SUCCESSFUL\nUSERNAME: "+ owner.getName() + "\nID: "+ owner.getUserID();
 	}
+
 	@POST
 	@Path("addRest/{id}")
 	public String addRestaurant(@PathParam("id") String id,Restaurant rest){
 		int ownerid = Integer.parseInt(id);
 		RestaurantOwner owner = em.find(RestaurantOwner.class,ownerid );
 		rest.setOwnerID(owner);
-		String list=""; int i=1;
+		String menu=""; int i=1;
 		
 		for(Meal meal:rest.getMeals()){ 
-			list+= i+"- "+meal.getName()+'\t'+meal.getPrice()+'\n';i++;
+			menu+= i+"- "+meal.getName()+'\t'+meal.getPrice()+'\n';	i++;
+			em.persist(meal); meal.setFk_restaurantId(rest);
 		}
 
 		em.persist(rest);
 		em.merge(owner);	//TODO
 
-		return rest.getName()+"'S MENU\n"+(list);
+		return rest.getName()+"'S MENU\n"+(menu);
 	}
+
 
 	@GET
 	@Path("getRest/{id}")
@@ -110,7 +100,20 @@ public class AkeelService{
 		for(Meal meal : rest.getMeals()){ 
 			list+= ++i+"- "+meal.getName()+'\t'+meal.getPrice()+'\n'; 
 		}
-		return rest.getName()+"'S MENU\n"+list+rest.getMeals().size();
+		return rest.getName()+"'S MENU\n"+list;
+	}
+
+	@GET
+	@Path("getAllRests/{id}")
+	public String getRestaurants( @PathParam("id") String id){
+		int ownerid = Integer.parseInt(id);
+		RestaurantOwner owner = em.find(RestaurantOwner.class,ownerid);
+		String list="";int i=1;
+		for(Restaurant rest: owner.getRests()){
+			list+=(i++) +"- "+rest.getName()+'\n';
+		}
+		return list;
+
 	}
 
 	@POST
@@ -133,23 +136,38 @@ public class AkeelService{
 
 	@DELETE
 	@Path("EditMenu/{restID}/{mealID}")
-	public void deleteMeal( @PathParam("restID") String restID, @PathParam("mealID") String mealID){
+	public String deleteMeal( @PathParam("restID") String restID, @PathParam("mealID") String mealID){
 		int restid = Integer.parseInt(restID);
 		int mealid = Integer.parseInt(mealID);
 		Restaurant rest = em.find(Restaurant.class, restid);
 		Meal meal = rest.getMeals().get(mealid); 
-		em.remove(meal);		
+		em.remove(meal);	
+		return getRestaurant(restID);
+	}
+
+	@POST
+	@Path("EditMenu/{restID}")
+	public String addMeal( @PathParam("restID") String restID, Meal newMeal){
+		int restid = Integer.parseInt(restID);
+		Restaurant rest = em.find(Restaurant.class, restid);
+		List<Meal> newList = rest.getMeals();
+		newList.add(newMeal);
+		em.persist(newMeal);
+		rest.setMeals(newList);
+		return getRestaurant(restID);
 	}
 
 	@PUT
 	@Path("EditMenu/{restID}/{mealID}")
-	public void deleteMeal( @PathParam("restID") String restID, @PathParam("mealID") String mealID,Meal newMeal){
+	public String updateMeal( @PathParam("restID") String restID, @PathParam("mealID") String mealID,Meal newMeal){
 		int restid = Integer.parseInt(restID);
 		int mealid = Integer.parseInt(mealID);
 		Restaurant rest = em.find(Restaurant.class, restid);
 		Meal meal = rest.getMeals().get(mealid);
-		em.remove(meal);
-		em.persist(newMeal); 	
+		meal.setName(newMeal.getName());
+		meal.setPrice(newMeal.getPrice());
+		return getRestaurant(restID);
+
 	}
 
 }
