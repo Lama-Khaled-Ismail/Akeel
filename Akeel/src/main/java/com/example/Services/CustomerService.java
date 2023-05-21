@@ -2,9 +2,12 @@ package com.example.Services;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.persistence.EntityManager;
@@ -16,7 +19,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.example.Model.Customer;
+import com.example.Model.*;
 
 @Stateless
 @Consumes(MediaType.APPLICATION_JSON)
@@ -54,6 +57,37 @@ public class CustomerService {
         else{
             return "Could not find user, either your ID or password are wrong";
         }
+    }
+
+    @POST
+    @Path("/add_order")
+    public Order addOrder(InputStream input){
+        //? should i make sure customer id exists in DB
+        // Create a JsonReader object to read the JSON input from the InputStream
+        JsonReader reader = Json.createReader(new InputStreamReader(input));
+
+        // Parse the JSON input to a JsonObject
+        JsonObject jsonInput = reader.readObject();
+        int customerID = Integer.parseInt(jsonInput.getString("customerID"));
+        Customer customer = em.find(Customer.class, customerID);
+        Order order =  new Order();
+        order.setCustomer(customer);
+        order.setDateTime(java.time.LocalDateTime.now());
+        
+        JsonArray meals = jsonInput.getJsonArray("meals");
+        int len = meals.size();
+        //List list =  new ArrayList<Integer>();
+        for (int i = 0; i < len; i++){
+            int x = Integer.parseInt(meals.getString(i));
+            Meal meal = em.find(Meal.class, x);
+            order.addMealItem(meal);
+        }
+
+        
+        
+        //em.persist(order);
+        return order;
+        
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.Model;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,6 +23,8 @@ public class Restaurant {
 	private RestaurantOwner owner;
 	@OneToMany(mappedBy = "fk_restaurantId",fetch = FetchType.LAZY)
 	private List<Meal> meals;
+	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+	private Set<Order> orders;
 	
 	
 	public String getName() {

@@ -1,10 +1,13 @@
 package com.example.Model;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -19,6 +22,8 @@ public class Meal {
 	@ManyToOne
 	@JoinColumn(name="meals")
 	private Restaurant fk_restaurantId;
+	@ManyToMany(mappedBy = "items")
+	private Set<Order> ordersWithThisMeal;
 
 
 	public float getPrice() {

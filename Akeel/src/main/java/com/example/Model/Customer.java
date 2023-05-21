@@ -17,7 +17,7 @@ public class Customer {
     private int userID;
 	private String name;
 	private String password;
-    @OneToMany(mappedBy = "customerID", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private Set<Order> orders;
 
     public Customer() {}

@@ -1,12 +1,21 @@
 package com.example.Model;
 
+
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
+import org.omg.PortableServer.IdAssignmentPolicyValue;
 
 enum orderStatus {
 
@@ -20,69 +29,104 @@ public class Order {
     
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int userID;
-    //private Meal items; // ? was causing a problem, add setters and getters
+	private int id;
+    @ManyToMany
+    @JoinTable(
+        name = "OrderXMeal",
+        joinColumns=@JoinColumn(name="id"),
+		inverseJoinColumns=@JoinColumn(name="mealID")
+    )
+    private Set<Meal> items;
     private double total;
-    @OneToOne
-    @JoinColumn(name ="runnerId")
-    private int runnerID; //todo make fk
-    private int restaurantID; //todo make fk
+    private LocalDateTime dateTime;
 
-    @ManyToOne(targetEntity = com.example.Model.Customer.class)
-    @JoinColumn(name="customer")
-    private int customerID;
+    
+    @OneToOne
+    @JoinColumn(name ="runnerID")
+    private Runner runner;
+    
+    @ManyToOne
+    @JoinColumn(name ="restaurantID")
+    private Restaurant restaurant;
+
+    @ManyToOne
+    @JoinColumn(name="customerID")
+    private Customer customer;
     private orderStatus status;
 
-    public int getUserID() {
-        return userID;
+    
+    public int getId() {
+        return id;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+
+    public void setId(int id) {
+        this.id = id;
     }
 
+    
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 
     public double getTotal() {
         return total;
     }
 
+
     public void setTotal(double total) {
         this.total = total;
     }
 
-    public int getRunnerID() {
-        return runnerID;
+
+    public Runner getRunner() {
+        return runner;
     }
 
-    public void setRunnerID(int runnerID) {
-        this.runnerID = runnerID;
+
+    public void setRunner(Runner runner) {
+        this.runner = runner;
     }
 
-    public int getRestaurantID() {
-        return restaurantID;
+
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setRestaurantID(int restaurantID) {
-        this.restaurantID = restaurantID;
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
-    public int getCustomerID() {
-        return customerID;
+
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
+
 
     public orderStatus getStatus() {
         return status;
     }
 
+
     public void setStatus(orderStatus status) {
         this.status = status;
     }
 
-    private Order() {}
+    public void addMealItem(Meal meal){
+        this.items.add(meal);
+    }
+    public Order() {}
 
 
 }
