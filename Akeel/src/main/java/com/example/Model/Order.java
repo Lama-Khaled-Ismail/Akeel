@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 enum orderStatus {
 
@@ -22,6 +23,8 @@ public class Order {
 	private int userID;
     //private Meal items; // ? was causing a problem, add setters and getters
     private double total;
+    @OneToOne
+    @JoinColumn(name ="runnerId")
     private int runnerID; //todo make fk
     private int restaurantID; //todo make fk
 
