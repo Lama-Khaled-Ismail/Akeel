@@ -5,8 +5,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-enum RUNNER_STATUS{
-    AVAILABLE , BUSY
+ enum RUNNER_STATUS{
+    AVAILABLE("Available") , BUSY("Busy");
+
+    String key;
+
+    RUNNER_STATUS(String str){
+        key =str;
+    }
+
+    public String value()
+    {
+        return this.key;
+    }
 }
 @Entity
 public class Runner {
@@ -15,9 +26,18 @@ public class Runner {
     private int userID;
     private String name;
 	private String password;
-    private RUNNER_STATUS status;
+    private RUNNER_STATUS status=RUNNER_STATUS.AVAILABLE;
     private double deliveryFees;
+    private int tripsCount;
 
+
+    public int getTripsCount() {
+        return tripsCount;
+    }
+
+    public void setTripsCount(int tripsCount) {
+        this.tripsCount = tripsCount;
+    }
 
     public int getUserID() {
         return userID;
@@ -43,18 +63,25 @@ public class Runner {
         this.password = password;
     }
 
-    public RUNNER_STATUS getStatus() {
-        return status;
+    public String getStatus() {
+        return status.value();
     }
 
-    public void setStatus(RUNNER_STATUS status) {
-        this.status = status;
+    public void setStatus(String statusStr) {
+        if(statusStr=="Available")
+        {
+            this.status=RUNNER_STATUS.AVAILABLE;
+        }
+        if(statusStr=="Busy")
+        {
+            this.status=RUNNER_STATUS.BUSY;
+        }
     }
 
     public double getDeliveryFees() {
         return deliveryFees;
     }
-    
+
     public void setDeliveryFees(double deliveryFees) {
         this.deliveryFees = deliveryFees;
     }
