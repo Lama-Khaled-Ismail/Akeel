@@ -3,6 +3,8 @@ package com.example.Services;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -31,18 +33,20 @@ public class RunnerService {
 
     @PersistenceContext(unitName = "Akeel")
 	private EntityManager em;
+   
 
-    private Runner currentRunner; 
+   
     
+    @PermitAll
     @POST
     @Path("signup")
     public String signUp(Runner runner){
         em.persist(runner);
-        currentRunner = runner;
-        String message = "Sign up was successful! Your ID is "+ runner.getUserID()+runner;
+        String message = "Sign up was successful! Your ID is "+ runner.getUserID();
         return message;
     }
 
+    @PermitAll
     @POST
     @Path("login")
     public String logIn(InputStream input){
@@ -57,7 +61,7 @@ public class RunnerService {
 
         Runner runner = em.find(Runner.class, id);
         if (runner.getPassword().equals(pass)){
-            currentRunner =runner;
+
             return "Welcome back "+runner.getName();
         }
         else{
@@ -65,25 +69,40 @@ public class RunnerService {
         }
     } 
 
+    @RolesAllowed("runner")
     @PUT
     @Path("deliveredorder/{id}")
-    public String deliveredOrder(@PathParam("id") int id){
+    public String deliveredOrder(@PathParam("id") int id,InputStream input){
+
+        JsonReader reader = Json.createReader(new InputStreamReader(input));
+        JsonObject jsonInput = reader.readObject();
+        int runnerId = Integer.parseInt(jsonInput.getString("runnerID"));
+        Runner runner = em.find(Runner.class, runnerId);
 
         Order order =em.find(Order.class, id);
         if(order.getId()==id){
             order.setStatus(orderStatus.DELIVERED);
-            currentRunner.setStatus("Available");
-            currentRunner.setTripsCount(currentRunner.getTripsCount()+1);
+            runner.setStatus("Available");
+            runner.setTripsCount(runner.getTripsCount()+1);
+            return "order status:"+order.getStatus()+"\n runner status:"+runner.getStatus();
+        }
+        else
+        {
+            return"invalid order";
         }
 
-        return "ordered delivered";
+        
+
+       
 
     }
 
+    @PermitAll
     @GET
-    @Path("trips")
-    public int getTripsCount(){
-        return currentRunner.getTripsCount();
+    @Path("trips/{id}")
+    public int getTripsCount(@PathParam("id") int id){
+        Runner runner = em.find(Runner.class, id);
+        return runner.getTripsCount();
         
     }
   
