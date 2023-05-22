@@ -18,6 +18,9 @@ public class Restaurant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int restaurantID;
+	public int getRestaurantID() {
+		return restaurantID;
+	}
 	private String name;
 	
     @ManyToOne
@@ -51,4 +54,8 @@ public class Restaurant {
 	public void setOwnerID(RestaurantOwner owner) {
 		this.owner = owner;
 	}
+    public void addMeal(Meal newMeal) {
+		meals.add(newMeal);
+		newMeal.setFk_restaurantId(this);
+    }
 }

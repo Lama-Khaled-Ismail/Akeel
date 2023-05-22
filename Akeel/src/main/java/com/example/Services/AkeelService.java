@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ArrayList;
 import javax.json.*;
 import javax.annotation.Generated;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,6 +35,7 @@ import com.example.Model.orderStatus;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/Owner")
+
 public class AkeelService{
 	
 	
@@ -43,6 +45,7 @@ public class AkeelService{
 
 	@GET
 	@Path("add")
+
 	public String getName(){
 		return "Hello";
 	}
@@ -93,7 +96,7 @@ public class AkeelService{
 
 	@GET
 	@Path("getRest/{id}")
-	public String getRestaurant (@PathParam("id") String id){
+	public String getDetails (@PathParam("id") String id){
 		int restid = Integer.parseInt(id);
 		Restaurant rest = em.find(Restaurant.class, restid);
 		String list=""; int i=0;
@@ -101,6 +104,16 @@ public class AkeelService{
 			list+= ++i+"- "+meal.getName()+'\t'+meal.getPrice()+'\n'; 
 		}
 		return rest.getName()+"'S MENU\n"+list;
+	}
+
+	private String getRestaurant(Restaurant rest){
+		//Restaurant rest = em.find(Restaurant.class, id);
+		String list=""; int i=0;
+		for(Meal meal : rest.getMeals()){ 
+			list+= ++i+"- "+meal.getName()+'\t'+meal.getPrice()+'\n'; 
+		}
+		return rest.getName()+"'S MENU\n"+list;
+
 	}
 
 	@GET
@@ -135,38 +148,45 @@ public class AkeelService{
 	}
 
 	@DELETE
-	@Path("EditMenu/{restID}/{mealID}")
-	public String deleteMeal( @PathParam("restID") String restID, @PathParam("mealID") String mealID){
-		int restid = Integer.parseInt(restID);
-		int mealid = Integer.parseInt(mealID);
-		Restaurant rest = em.find(Restaurant.class, restid);
-		Meal meal = rest.getMeals().get(mealid); 
+	@Path("EditMenu/{ownerId}/{restID}/{mealNum}")
+	public String deleteMeal(@PathParam("restID") String restNum, @PathParam("mealNum") String mealID,@PathParam("ownerId") String ownerID){
+		int restid = Integer.parseInt(restNum);
+		int ownerid = Integer.parseInt(ownerID);
+		int mealnum = Integer.parseInt(mealID);
+		RestaurantOwner owner = em.find(RestaurantOwner.class, ownerid);
+		Restaurant rest =owner.getRests().get(restid-1);
+		Meal meal = rest.getMeals().get(mealnum-1);
+		rest.getMeals().remove(meal);
 		em.remove(meal);	
-		return getRestaurant(restID);
+		return getRestaurant(rest);
 	}
 
 	@POST
-	@Path("EditMenu/{restID}")
-	public String addMeal( @PathParam("restID") String restID, Meal newMeal){
-		int restid = Integer.parseInt(restID);
-		Restaurant rest = em.find(Restaurant.class, restid);
-		List<Meal> newList = rest.getMeals();
-		newList.add(newMeal);
+	@Path("EditMenu/{ownerId}/{restNum}")
+	public String addMeal( @PathParam("ownerId") String ownerID, @PathParam("restNum") String restNum, Meal newMeal){
+		int restid = Integer.parseInt(restNum);
+		int ownerid = Integer.parseInt(ownerID);
+		RestaurantOwner owner = em.find(RestaurantOwner.class, ownerid);
+		Restaurant rest =owner.getRests().get(restid-1);
+		//rest.addMeal(newMeal);
+		//em.merge(rest);
+		newMeal.setFk_restaurantId(rest);
 		em.persist(newMeal);
-		rest.setMeals(newList);
-		return getRestaurant(restID);
+		return getRestaurant(rest);
 	}
 
 	@PUT
-	@Path("EditMenu/{restID}/{mealID}")
-	public String updateMeal( @PathParam("restID") String restID, @PathParam("mealID") String mealID,Meal newMeal){
-		int restid = Integer.parseInt(restID);
-		int mealid = Integer.parseInt(mealID);
-		Restaurant rest = em.find(Restaurant.class, restid);
-		Meal meal = rest.getMeals().get(mealid);
+	@Path("EditMenu/{ownerId}/{restID}/{mealNum}")
+	public String updateMeal( @PathParam("restID") String restNum, @PathParam("mealNum") String mealID,@PathParam("ownerId") String ownerID,Meal newMeal){
+		int restid = Integer.parseInt(restNum);
+		int ownerid = Integer.parseInt(ownerID);
+		int mealnum = Integer.parseInt(mealID);
+		RestaurantOwner owner = em.find(RestaurantOwner.class, ownerid);
+		Restaurant rest =owner.getRests().get(restid-1);
+		Meal meal = rest.getMeals().get(mealnum-1);
 		meal.setName(newMeal.getName());
 		meal.setPrice(newMeal.getPrice());
-		return getRestaurant(restID);
+		return getRestaurant(rest);
 
 	}
 
