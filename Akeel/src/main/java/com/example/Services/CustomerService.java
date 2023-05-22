@@ -73,13 +73,15 @@ public class CustomerService {
         Order order =  new Order();
         order.setCustomer(customer);
         order.setDateTime(java.time.LocalDateTime.now());
-        
+        int restID = Integer.parseInt(jsonInput.getString("restaurantID"));
+        Restaurant rest = em.find(Restaurant.class, restID);
         JsonArray meals = jsonInput.getJsonArray("meals");
         int len = meals.size();
-        //List list =  new ArrayList<Integer>();
+        List list =  new ArrayList<Meal>();
         for (int i = 0; i < len; i++){
             int x = Integer.parseInt(meals.getString(i));
-            Meal meal = em.find(Meal.class, x);
+            Meal meal = rest.getMeals().get(x-1);
+            //list.add(meal);
             order.addMealItem(meal);
         }
 
@@ -89,6 +91,8 @@ public class CustomerService {
         return order;
         
     }
+
+    
 
 
 }
