@@ -28,7 +28,7 @@ public class Runner {
 	private String password;
     private RUNNER_STATUS status=RUNNER_STATUS.AVAILABLE;
     private double deliveryFees;
-    private int tripsCount;
+    private int tripsCount=0;
 
 
     public int getTripsCount() {

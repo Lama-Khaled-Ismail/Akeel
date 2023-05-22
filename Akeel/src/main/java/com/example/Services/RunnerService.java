@@ -39,7 +39,7 @@ public class RunnerService {
     public String signUp(Runner runner){
         em.persist(runner);
         currentRunner = runner;
-        String message = "Sign up was successful! Your ID is "+ runner.getUserID();
+        String message = "Sign up was successful! Your ID is "+ runner.getUserID()+runner;
         return message;
     }
 
@@ -70,7 +70,7 @@ public class RunnerService {
     public String deliveredOrder(@PathParam("id") int id){
 
         Order order =em.find(Order.class, id);
-        if(order.getId()==1){
+        if(order.getId()==id){
             order.setStatus(orderStatus.DELIVERED);
             currentRunner.setStatus("Available");
             currentRunner.setTripsCount(currentRunner.getTripsCount()+1);
