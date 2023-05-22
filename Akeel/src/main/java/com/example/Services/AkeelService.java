@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ArrayList;
 import javax.json.*;
 import javax.annotation.Generated;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.PostActivate;
 import javax.ejb.Stateless;
@@ -36,20 +37,14 @@ import com.example.Model.orderStatus;
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/Owner")
 
+@RolesAllowed("owner")
 public class AkeelService{
-	
 	
 	@PersistenceContext(unitName = "Akeel")
 	private EntityManager em;
 	
 
-	@GET
-	@Path("add")
-
-	public String getName(){
-		return "Hello";
-	}
-
+	@PermitAll
 	@GET
 	@Path("login")
 	public String login(RestaurantOwner owner){
@@ -66,6 +61,7 @@ public class AkeelService{
 		return "LOGIN FAILED.TRY AGAIN"+owner.getName();
 	}
 
+	@PermitAll
 	@POST
 	@Path("signup")
 	public String signUp(RestaurantOwner owner){
@@ -73,6 +69,7 @@ public class AkeelService{
        
         return "SIGN UP SUCCESSFUL\nUSERNAME: "+ owner.getName() + "\nID: "+ owner.getUserID();
 	}
+
 
 	@POST
 	@Path("addRest/{id}")

@@ -16,6 +16,7 @@
             <web-resource-name>RESTEasy</web-resource-name>
             <description>application security constraints</description>
             <url-pattern>/akeel/api/runner/*</url-pattern>
+            <url-pattern>/akeel/api/Owner/*</url-pattern>
 
         </web-resource-collection>
         <auth-constraint>
