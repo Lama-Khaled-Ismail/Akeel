@@ -12,8 +12,10 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -73,15 +75,13 @@ public class CustomerService {
         Order order =  new Order();
         order.setCustomer(customer);
         order.setDateTime(java.time.LocalDateTime.now());
-        int restID = Integer.parseInt(jsonInput.getString("restaurantID"));
-        Restaurant rest = em.find(Restaurant.class, restID);
+        
         JsonArray meals = jsonInput.getJsonArray("meals");
         int len = meals.size();
-        List list =  new ArrayList<Meal>();
+        //List list =  new ArrayList<Integer>();
         for (int i = 0; i < len; i++){
             int x = Integer.parseInt(meals.getString(i));
-            Meal meal = rest.getMeals().get(x-1);
-            //list.add(meal);
+            Meal meal = em.find(Meal.class, x);
             order.addMealItem(meal);
         }
 
@@ -92,7 +92,14 @@ public class CustomerService {
         
     }
 
-    
+    @GET
+    @Path("/list_resturants")
+    public List<String> listResturants(){
+        Query query=em.createQuery("SELECT r.name from Restaurant r ");
+        List<String> names =query.getResultList();
+        return names;
+
+    }
 
 
 }

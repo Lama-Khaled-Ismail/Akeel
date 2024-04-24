@@ -1,7 +1,9 @@
 package com.example.Model;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,10 +32,17 @@ public class Meal {
 	public void setFk_restaurantId(Restaurant fk_restaurantId) {
 		this.fk_restaurantId = fk_restaurantId;
 	}
-	@ManyToMany(mappedBy = "items")
-	private Set<Order> ordersWithThisMeal;
+	
+	@ManyToMany(mappedBy = "items",cascade = CascadeType.PERSIST)
+	private Set<Order> ordersWithThisMeal=new HashSet<>();
 
 
+	public Set<Order> getOrdersWithThisMeal() {
+		return ordersWithThisMeal;
+	}
+	public void setOrdersWithThisMeal(Set<Order> ordersWithThisMeal) {
+		this.ordersWithThisMeal = ordersWithThisMeal;
+	}
 	public float getPrice() {
 		return price;
 	}
@@ -46,5 +55,7 @@ public class Meal {
 	public void setName(String name) {
 		this.mealName = name;
 	}
+
+
 }
    

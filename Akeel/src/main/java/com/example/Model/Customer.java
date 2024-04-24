@@ -1,5 +1,6 @@
 package com.example.Model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -10,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Customer {
+public class Customer implements Serializable {
     
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,8 +3,10 @@ package com.example.Model;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,14 +24,14 @@ public class Order {
     
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-    @ManyToMany
+	private int orderID;
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
         name = "OrderXMeal",
-        joinColumns=@JoinColumn(name="id"),
+        joinColumns=@JoinColumn(name="orderID"),
 		inverseJoinColumns=@JoinColumn(name="mealID")
     )
-    private Set<Meal> items;
+    private Set<Meal> items=new HashSet<>();
     private double total;
     private LocalDateTime dateTime;
 
@@ -118,6 +120,7 @@ public class Order {
 
     public void addMealItem(Meal meal){
         this.items.add(meal);
+        meal.getOrdersWithThisMeal().add(this);
     }
     public Order() {}
 
