@@ -14,12 +14,12 @@ specific orders.
   Restaurant owner, customer, runner  
   <br>● Sign up and Login for each role
  
-  <br>● Restaurant owner:
+  <br>-● Restaurant owner:
   
-  <br>  ■ Create restaurant menu
-  <br>■ Edit restaurant: change menu meals for each restaurant
-  <br>■ Get restaurant details by id
-<br>■ Create restaurant report: given a restaurant id print
+  <br>  -■ Create restaurant menu
+  <br>  -■ Edit restaurant: change menu meals for each restaurant
+  <br>  -■ Get restaurant details by id
+  <br>  -■ Create restaurant report: given a restaurant id print
   how much the restaurant earns (summation of total amount of all completed
   orders) , Number of completed orders, Number of canceled orders
   
