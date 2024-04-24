@@ -16,7 +16,7 @@ specific orders.
  
   <br>● Restaurant owner:
   
-  <br>■ Create restaurant menu
+  <br>  ■ Create restaurant menu
   <br>■ Edit restaurant: change menu meals for each restaurant
   <br>■ Get restaurant details by id
 <br>■ Create restaurant report: given a restaurant id print
