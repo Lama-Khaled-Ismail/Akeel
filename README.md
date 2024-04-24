@@ -4,7 +4,7 @@ Al-Akeel is an online order management platform.That platform generally allows u
 It also tracks and delivers such orders from the restaurant's locations to the customer.The platform serves clients from either a dedicated mobile application, web app or assisted from
 customer service over the phone. The platform allows restaurant staff to manage their restaurants
 specific orders. 
-# Technologies Used
+## Technologies Used
 
 - **Java EE**: The project utilizes Java EE (Enterprise Edition) for building enterprise-level applications.
 - **JBoss**: The application is deployed and runs on the JBoss application server, providing a robust and scalable environment.
