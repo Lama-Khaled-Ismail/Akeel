@@ -15,6 +15,7 @@ specific orders.
   <br>● Sign up and Login for each role
  
   <br>● Restaurant owner:
+  
   <br> ■ Create restaurant menu
   <br> ■ Edit restaurant: change menu meals for each restaurant
   <br> ■ Get restaurant details by id
@@ -26,7 +27,6 @@ specific orders.
   <br>
   <br>■ Create order by customer
   <br>Exceptations: imagine a normal restaurant receipt
-  
   <br>Order details should contains date ,restaurant name, items list , delivery fees,
   <br>runner name, total receipt value (summation of items prices , delivery fees )
   <br>list orders by customer id
