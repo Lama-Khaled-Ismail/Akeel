@@ -26,18 +26,12 @@ specific orders.
   <br>● Customer:
   <br>
   <br>■ Create order by customer
-  <br>Exceptations: imagine a normal restaurant receipt
-  <br>Order details should contains date ,restaurant name, items list , delivery fees,
-  <br>runner name, total receipt value (summation of items prices , delivery fees )
-  <br>list orders by customer id
-  <br>■ When creating an order select a random available runner from db and assign it to
-  <br>an order and convert his status to busy
-  <br>■ Edit order [change an order’s items] make sure an order is not canceled and it is
-  <br>in the preparing state to be edited
+  <br>Order details should contains date ,restaurant name, items list , delivery fees, runner name, total receipt value (summation of items prices , delivery fees )list orders by customer id
+  <br>■ When creating an order select a random available runner from db and assign it to an order and convert his status to busy
+  <br>■ Edit order [change an order’s items] make sure an order is not canceled and it is in the preparing state to be edited
   <br>■ List all restaurants
   <br>
   <br>● Runner:
   
   <br>■ Runner can mark an order is delivered and his status to available
-  <br>■ Get number of trips completed by a runner make sure orders are not canceled
-  <br>and marked as completed
+  <br>■ Get number of trips completed by a runner make sure orders are not canceled and marked as completed
