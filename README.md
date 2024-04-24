@@ -7,8 +7,7 @@ specific orders.
 
 ## System functionalities
   User can have 3 different roles Customer, RestaurantOwner, Runner roles
-  Restaurant owner, customer, runner
-    ● Sign up and Login for each role
+  Restaurant owner, customer, runner  ● Sign up and Login for each role
     Note: when creating runner account let user enter delivery fees per order , this value will be
     reused when calculating the total order value
     ● Restaurant owner:
