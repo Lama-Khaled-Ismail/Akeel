@@ -19,12 +19,10 @@ specific orders.
   <br> ■ Create restaurant menu
   <br> ■ Edit restaurant: change menu meals for each restaurant
   <br> ■ Get restaurant details by id
-  <br> ■ Create restaurant report: given a restaurant id print
-  how much the restaurant earns (summation of total amount of all completed
-  orders) , Number of completed orders, Number of canceled orders
+  <br> ■ Create restaurant report: given a restaurant id print how much the restaurant earns (summation of total amount of all completed orders) , Number of completed orders, Number of canceled orders
   
   <br>● Customer:
-  <br>
+  
   <br>■ Create order by customer
   <br>Order details should contains date ,restaurant name, items list , delivery fees, runner name, total receipt value (summation of items prices , delivery fees )list orders by customer id
   <br>■ When creating an order select a random available runner from db and assign it to an order and convert his status to busy
